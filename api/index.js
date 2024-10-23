@@ -35,10 +35,10 @@ app.use("/api/auth" , authRouts);
 app.use("/api/post" , postRouts);
 app.use("/api/comment" , commentRouts);
 
-app.use(express.static(path.join(__dirname,'/client/dist')))
+app.use(express.static(path.join(__dirname,'/client/dest')))
 
 app.get('*',(req,res)=>{
-    res.sendFile(path.join(__dirname, process.env.FRONT_END || "client" , "dist" , "index.html"))
+    res.sendFile(path.join(__dirname,  "client" , "dest" , "index.html"))
 })
 
 
