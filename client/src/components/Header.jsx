@@ -15,7 +15,7 @@ function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const theme = useSelector((state) => state.theme.theme);
   const [searchTrem , setSearchTrem] = useState("")
-  console.log(searchTrem);
+
   
   useEffect(()=>{
     const urlParams = new URLSearchParams(location.search)
@@ -23,7 +23,7 @@ function Header() {
     if(searchTremFromUrl){
       setSearchTrem(searchTremFromUrl)
     }
-    console.log(`hello from header`);
+
     
   },[location.search])
   const handleSingout = async () => {
@@ -45,7 +45,6 @@ function Header() {
     e.preventDefault();
     const urlParams = new URLSearchParams(location.search)
     urlParams.set("searchTrem" , searchTrem)
-    console.log(urlParams.toString());
     navigate(`/search?${urlParams.toString()}`)
   }
   return (

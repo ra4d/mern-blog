@@ -33,7 +33,6 @@ export default function Search() {
 		const getPosts = async() => {
 			setLoading(true)
 			const searchQuery = urlParams.toString()
-			console.log(searchQuery);
 			
 			try {
 				const res = await fetch(`/api/post/getposts?${searchQuery}`)
@@ -57,12 +56,12 @@ export default function Search() {
 
 		}
 		getPosts()
-		console.log();
+
 		
 	},[location.search])
 
 
-	console.log(sidebarData);
+
 
 
 
@@ -96,7 +95,6 @@ export default function Search() {
 		urlParams.set("sort" , sidebarData.sort);
 		urlParams.set("category" , sidebarData.category);
 		const searchQuery = urlParams.toString()
-		console.log(searchQuery);
 		navigate(`/search?${searchQuery}`)
 	}
 	const handleShowMore = async(e) =>{
@@ -106,7 +104,7 @@ export default function Search() {
 		const urlParams = new URLSearchParams(location.search)
 		urlParams.set("startIndex",startIndex)
 		const searchQuery = urlParams.toString()
-		console.log(searchQuery);
+
 		
 		try {
 			const res = await fetch(`/api/post/getposts?${searchQuery}`)
@@ -122,7 +120,7 @@ export default function Search() {
 					setShowMore(false)
 				}
 			}else{
-				console.log(error.message);
+				console.log(data.message);
 			}
 		} catch (error) {
 			console.log(error.message);

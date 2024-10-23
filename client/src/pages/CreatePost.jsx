@@ -71,7 +71,6 @@ export default function CreatePost() {
       const data = await res.json()
       if(res.ok){
         setPublishError(null)
-        console.log(data)
         navigate(`/post/${data.slug}`)
       }else{
         setPublishError(data.message)
