@@ -11,6 +11,7 @@ export default function DashUsers() {
 	const [userID , setUserId] = useState(null)
   const { currentUser } = useSelector((state) => state.user);
   const [ deleteuser , setDeleteuser ] = useState()
+  const [showMore , setShowMore] = useState(true)
 
   useEffect(() => {
     const getusers = async() => {
@@ -19,7 +20,9 @@ export default function DashUsers() {
 				const data = await res.json()
 				if(res.ok){
 					setUser(data.users)
-					console.log(data);
+          if(data.users.length < 9){
+            setShowMore(false)
+          }
 				}
 			} catch (error) {
 				console.log(error);
@@ -28,7 +31,25 @@ export default function DashUsers() {
       getusers();
     }
   }, []);
-	console.log(user);
+  const handleShowMore = async()=> {
+    const startIndex = user.length
+    try{
+      const res = await fetch(`/api/user/getusers?startIndex=${startIndex}`)
+      const data = await res.json()
+      if(res.ok){
+        setUser((prev)=> [...prev , ...data.users])
+        if(data.users.length < 9){
+          setShowMore(false)
+        }
+      }else{
+        console.log(data.message);
+        
+      }
+    }catch(error){
+      console.log(error.message);
+      
+    }
+  }
 	const handleDeleteUser = async() => { 
 		setOpenModal(false)
 		try {
@@ -109,6 +130,11 @@ export default function DashUsers() {
         </Modal.Body>
       </Modal>
       </Table>
+      {
+          showMore && (<Button gradientMonochrome="purple" onClick={handleShowMore} className='w-full my-2'>
+              show more
+          </Button>)
+        }
       {
         deleteuser && (<>
           <Alert color="failure" className="font-bold text-base">{deleteuser}</Alert>

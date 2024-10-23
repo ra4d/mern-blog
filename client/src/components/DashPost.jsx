@@ -38,7 +38,6 @@ export default function DashPost() {
   },[currentUser._id])
   const handleShowMore = async()=> {
     const starIndex = userPosts.length
-    
     try{
       const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&starIndex=${starIndex}`)
       const data = await res.json()

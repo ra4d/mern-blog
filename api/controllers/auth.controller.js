@@ -6,8 +6,16 @@ import { errorHandler } from "../utils/error.js"
 const sginup = async (req , res , next) => {
     const {username , email , password} = req.body
     if(!username || !email || !password || username==="" ||  email==="" || password === ""){
-        next(errorHandler(400, "All fild are requird"));
+        return next(errorHandler(400, "All fild are requird"));
     }
+	const chackUser = await User.findOne({email})
+	if(chackUser){
+		return next(errorHandler(400, "This email is already in use."));
+	}
+	const chackUsername = await User.findOne({username})
+	if(chackUsername){
+		return next(errorHandler(400, "This username is already in use."));
+	}
     const hashedPassword = bcrypt.hashSync(password , 10)
     const newUser = new User({
         username,

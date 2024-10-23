@@ -10,6 +10,7 @@ export default function DashComment() {
   const [allComment, setAllComment] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [commentId, setCommentId] = useState(null);
+  const [showMore , setShowMore] = useState(true)
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -18,6 +19,9 @@ export default function DashComment() {
         const data = await res.json();
         if (res.ok) {
           setAllComment(data.AllComments);
+          if(data.AllComments.length < 9){
+            setShowMore(false)
+          }
         }
       } catch (error) {
         console.log(error);
@@ -47,7 +51,25 @@ export default function DashComment() {
       dispatch(userSlice.actions.deleteFailure(error.message));
     }
   };
-
+  const handleShowMore = async()=> {
+    const startIndex = allComment.length
+    try{
+      const res = await fetch(`/api/comment/getallcomments?startIndex=${startIndex}`)
+      const data = await res.json()
+      if(res.ok){
+        setAllComment((prev)=> [...prev , ...data.AllComments])
+        if(data.AllComments.length < 9){
+          setShowMore(false)
+        }
+      }else{
+        console.log(data.message);
+        
+      }
+    }catch(error){
+      console.log(error.message);
+      
+    }
+  }
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 w-full">
       {currentUser.isAdmin && allComment.length > 0 ? (
@@ -96,6 +118,11 @@ export default function DashComment() {
               </Table.Body>
             ))}
           </Table>
+          {
+          showMore && (<Button gradientMonochrome="purple" onClick={handleShowMore} className='w-full my-2'>
+              show more
+          </Button>)
+        }
           <Modal
             show={openModal}
             size="md"

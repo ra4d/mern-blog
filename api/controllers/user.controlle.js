@@ -10,6 +10,10 @@ const updata = async (req, res, next) => {
     return next(errorHandler(403, "you are not allowed to update this user"));
   }
   if (req.body.username) {
+    const chackUsername = await User.findOne({username:req.body.username})
+    if(chackUsername){
+      return next(errorHandler(400, "This username is already in use."));
+    }
     if (req.body.username.length < 7 || req.body.username.length > 20) {
       return next(
         errorHandler(
